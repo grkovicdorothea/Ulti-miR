@@ -101,7 +101,7 @@ with tab1:
 
 # TAB 2: CLUSTERING VIEW
 with tab2:
-    st.header("Clustering Settings")
+    st.header("Clustering")
 
     # User inputs to control number of clusters and clustering method
     n_clusters = st.slider("Number of Clusters", 2, 50, 10)
@@ -221,26 +221,26 @@ with tab2:
     g2 = sns.clustermap(heatmap_data_2, cmap="viridis", figsize=(10, 8))
     st.pyplot(g2.fig)
 
-    st.subheader(
-        f"Heatmap: Similarities Within Selected Cluster (Cluster {selected_cluster_label})")
-    cluster_heatmap_data = jcmat.loc[cluster_members, cluster_members]
-    fig3, ax3 = plt.subplots(figsize=(10, 8))
-    sns.heatmap(cluster_heatmap_data, cmap="viridis", annot=False,
-                xticklabels=True, yticklabels=True, ax=ax3)
-    plt.xticks(rotation=90)
-    st.pyplot(fig3)
+#    st.subheader(
+#        f"Heatmap: Similarities Within Selected Cluster (Cluster {selected_cluster_label})")
+#    cluster_heatmap_data = jcmat.loc[cluster_members, cluster_members]
+#    fig3, ax3 = plt.subplots(figsize=(10, 8))
+#    sns.heatmap(cluster_heatmap_data, cmap="viridis", annot=False,
+#                xticklabels=True, yticklabels=True, ax=ax3)
+#    plt.xticks(rotation=90)
+#    st.pyplot(fig3)
 
-    selected_cluster_for_heatmap = st.selectbox(
-        "Select Cluster to Visualize / Show Heatmap", sorted(df["cluster"].unique(), key=int))
-    heatmap_cluster_data = jcmat.loc[
-        df[df["cluster"] == selected_cluster_for_heatmap]["disease"],
-        df[df["cluster"] == selected_cluster_for_heatmap]["disease"]
-    ]
-    fig4, ax4 = plt.subplots(figsize=(10, 8))
-    sns.heatmap(heatmap_cluster_data, cmap="viridis", annot=False,
-                xticklabels=True, yticklabels=True, ax=ax4)
-    plt.xticks(rotation=90)
-    st.pyplot(fig4)
+#    selected_cluster_for_heatmap = st.selectbox(
+#        "Select Cluster to Visualize / Show Heatmap", sorted(df["cluster"].unique(), key=int))
+#    heatmap_cluster_data = jcmat.loc[
+#        df[df["cluster"] == selected_cluster_for_heatmap]["disease"],
+#        df[df["cluster"] == selected_cluster_for_heatmap]["disease"]
+#    ]
+#    fig4, ax4 = plt.subplots(figsize=(10, 8))
+#    sns.heatmap(heatmap_cluster_data, cmap="viridis", annot=False,
+#                xticklabels=True, yticklabels=True, ax=ax4)
+#    plt.xticks(rotation=90)
+#    st.pyplot(fig4)
 
 # TAB 3: NETWORK ANALYSIS
 with tab3:
