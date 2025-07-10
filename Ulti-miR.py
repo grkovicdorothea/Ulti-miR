@@ -35,11 +35,61 @@ def get_disease_label(mesh_id):
     return f"{mesh_id} — {', '.join(names)}"
 
 
-tab0, tab1, tab2, tab3 = st.tabs(
-    ["Introduction", "miRNA SQL Explorer", "Clustering View", "Similarity Network"])
+tab_names = ["Introduction", "miRNA SQL Explorer", "Clustering View", "Similarity Network"]
+selected_tab = st.selectbox("Navigate:", tab_names)
+
+if selected_tab == "miRNA SQL Explorer":
+    with st.sidebar:
+        st.markdown("### Core Tables")
+        st.markdown("#### core_mirna")
+        with st.expander("merged_mirBase"):
+            st.markdown("\n- miRNA_ID\n- miRBase_acc\n- miRNA_sequence\n- miRNA_type")
+        with st.expander("miRstart_human_miRNA_information"):
+            st.markdown("\n- miRNA_ID\n- miRNA_location\n- PCG\n- PCG_embl\n- lncRNA_embl\n- Intragenic/Intergenic\n- PCG_exon/intron\n- lncRNA_exon/intron")
+        st.markdown("#### core_gene")
+        with st.expander("miRstart_human_miRNA_TSS_information"):
+            st.markdown("\n- miRNA_ID\n- miRBase_acc\n- TSS_position\n- TSS_score\n- TSS_CAGE\n- TSS_tag\n- TSS_DNase\n- TSS_H3K4me3\n- TSS_Pol II")
+        st.markdown("#### core_disease")
+        with st.expander("HMDD"):
+            st.markdown("\n- PMID\n- miRNA_ID\n- Disease\n- Disease_MESH_ID\n- Disease_DOID_ID\n- Disease_categories\n- Disease_main_type\n- Disease_sub_type")
+        with st.expander("dbDEMC_low_throughput"):
+            st.markdown("\n- miRNA_ID\n- Cell_line\n- miRNA_expression\n- ExperimentSourceInfo\n- PMID\n- Disease\n- Disease_MESH_ID\n- Disease_DOID_ID\n- Disease_categories\n- Disease_main_type\n- Disease_sub_type")
+        with st.expander("miRcancer"):
+            st.markdown("\n- miRNA_ID\n- miRNA_expression\n- Disease\n- Disease_MESH_ID\n- Disease_DOID_ID\n- Disease_categories\n- Disease_main_type\n- Disease_sub_type")
+        with st.expander("plasmiR"):
+            st.markdown("\n- miRNA_ID\n- miRBase_acc\n- precursor_miRNA_id\n- PMID\n- diagnostic_marker\n- prognostic_marker\n- tested_prognostic_outcome\n- Biomarker_sample_type\n- miRNA_expression\n- Cell_line\n- Disease\n- Disease_MESH_ID\n- Disease_DOID_ID\n- Disease_categories\n- Disease_main_type\n- Disease_sub_type")
+        st.markdown("#### core_snp")
+        with st.expander("miRNASNPv4_SNP_associations_multiCancer_celltype"):
+            st.markdown("\n- Cell_line\n- Immune_cell_abundance\n- beta\n- Pvalue\n- FDR\n- SNP_ref\n- SNP_alt\n- SNP_Source\n- SNP_location\n- dbSNP_id\n- SNP_gene\n- Disease\n- Disease_MESH_ID\n- Disease_DOID_ID\n- Disease_categories\n- Disease_main_type\n- Disease_sub_type")
+        with st.expander("miRNASNPv4_pre-miRNA_variants"):
+            st.markdown("\n- SNP_location\n- dbSNP_id\n- SNP_ref\n- SNP_alt\n- miRNA_ID\n- deltaG\n- miRNA_domain")
+        with st.expander("miRNet-snp-mir-hsa"):
+            st.markdown("\n- miRNet_id\n- SNP_location\n- dbSNP_id\n- mature_miRNA_id\n- mature_miRBase_acc\n- miRNA_ID\n- miRBase_acc\n- miRNA_domain\n- SNP_High_Confidence\n- SNP_Robust_FANTOM5\n- Conserved_ADmiRE\n- AF_Percentile_gnomAD\n- Phastcons_100way")
+        st.markdown("#### core_drug")
+        with st.expander("miRNet-mir-mol-hsa"):
+            st.markdown("\n- miRNet_id\n- miRBase_acc\n- miRNA_ID\n- Drug\n- CID\n- SMILES\n- Cell_line\n- PMID\n- miRNA_expression")
+        with st.expander("ncDR_Curated_DRmiRNA"):
+            st.markdown("\n- PMID\n- miRNA_ID\n- miRBase_acc\n- Drug\n- CID\n- SMILES\n- miRNA_expression\n- Drug_effect\n- Target_gene\n- Regulation\n- Disease\n- Disease_MESH_ID\n- Disease_DOID_ID\n- Disease_categories\n- Disease_main_type\n- Disease_sub_type")
+        with st.expander("ncDR_Predicted_DRmiRNA"):
+            st.markdown("\n- NSC_ID\n- Drug\n- CID\n- SMILES\n- miRNA_ID\n- miRBase_acc\n- Pvalue\n- Qvalue\n- logFC\n- miRNA_expression\n- Drug_effect_size\n- Drug_effect")
+        st.markdown("#### core_metadata")
+        with st.expander("miRNA_similarity_scores_ALL"):
+            st.markdown("\n- miRNA_ID\n- mesh_similarity\n- doid_similarity")
+        st.markdown("#### relationships")
+        with st.expander("miRNet-mir-tf-hsa"):
+            st.markdown("\n- miRNet_id\n- miRBase_acc\n- miRNA_ID\n- TF_gene\n- TF_gene_entrez\n- TF_gene_embl\n- TF_action_type\n- PMID")
+        with st.expander("miRNet-mir-epi-hsa"):
+            st.markdown("\n- miRNet_id\n- miRBase_acc\n- miRNA_ID\n- epi_regulator\n- epi_modification\n- miRNA_expression\n- PMID\n- epi_target\n- Disease\n- Disease_MESH_ID\n- Disease_DOID_ID\n- Disease_categories\n- Disease_main_type\n- Disease_sub_type")
+        with st.expander("miRNet-mir-lncRNA"):
+            st.markdown("\n- miRNet_ID\n- miRBase_acc\n- miRNA_ID\n- lncRNA_gene \n- lncRNA_entrez\n- lncRNA_embl")
+        with st.expander("miRNet-mir-pseudogene"):
+            st.markdown("\n- miRNet_ID\n- miRBase_acc\n- miRNA_ID\n- pseudogene\n- pseudogene_entrez\n- pseudogene_embl")
+        with st.expander("miRNet-mir-sncRNA"):
+            st.markdown("\n- miRNet_ID\n- miRBase_acc\n- miRNA_ID\n- snc_gene\n- snc_entrez\n- snc_embl")
+        
 
 # TAB 0: INTRO
-with tab0:
+if selected_tab == "Introduction":
     st.title("Ulti-miR v1: An integrated, ontology-mapped database of miRNA associations with miRNA–disease similarity analytics")
     st.markdown("""
 MicroRNAs (miRNAs) have emerged as critical regulators involved in numerous biological processes, making them significant biomarkers and therapeutic targets across a broad spectrum of diseases, including cancers, cardiovascular disorders, and neurological conditions. Over the past two decades, a multitude of specialised miRNA databases have been developed. Pioneer resources like HMDD remain the go-to for literature-curated associations, while recent platforms such as PlasmiR, add > 1000 blood-borne miRNA biomarkers spanning 112 diseases. Together, these datasets synthesise data from low-throughput validations, high-throughput screens, and computational predictions, giving researchers multiple vantage points on miRNA pathobiology.
@@ -52,7 +102,7 @@ Our platform is designed to maximize usability, transparency, and reproducibilit
 """)
 
 # TAB 1: SQL EXPLORER
-with tab1:
+elif selected_tab == "miRNA SQL Explorer":
     st.header("miRNA SQL Explorer")
     db_path = "miRNA.db"
     csv_mapping = {
@@ -100,8 +150,8 @@ with tab1:
             st.error(f"❌ Error: {e}")
 
 # TAB 2: CLUSTERING VIEW
-with tab2:
-    st.header("Clustering")
+elif selected_tab == "Clustering View":
+    st.header("Disease Clustering")
 
     # User inputs to control number of clusters and clustering method
     n_clusters = st.slider("Number of Clusters", 2, 50, 10)
@@ -243,7 +293,7 @@ with tab2:
 #    st.pyplot(fig4)
 
 # TAB 3: NETWORK ANALYSIS
-with tab3:
+elif selected_tab == "Similarity Network":
     st.header("Disease Similarity Network")
 
     threshold = st.slider(
