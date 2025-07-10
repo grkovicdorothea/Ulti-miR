@@ -15,6 +15,9 @@ import networkx as nx
 from pyvis.network import Network
 import streamlit.components.v1 as components
 
+if "tab_index" not in st.session_state:
+    st.session_state.tab_index = 0
+
 st.set_page_config(page_title="Ulti-miR Explorer", layout="wide")
 
 # Load Jaccard matrix
@@ -35,10 +38,9 @@ def get_disease_label(mesh_id):
     return f"{mesh_id} — {', '.join(names)}"
 
 
-tab_names = ["Introduction", "miRNA SQL Explorer", "Clustering View", "Similarity Network"]
-selected_tab = st.selectbox("Navigate:", tab_names)
+tabs = st.tabs(["Introduction", "miRNA SQL Explorer", "Clustering View", "Similarity Network"])
 
-if selected_tab == "miRNA SQL Explorer":
+if st.session_state.tab_index == 1:
     with st.sidebar:
         st.markdown("### Core Tables")
         st.markdown("#### core_mirna")
@@ -89,7 +91,8 @@ if selected_tab == "miRNA SQL Explorer":
         
 
 # TAB 0: INTRO
-if selected_tab == "Introduction":
+with tabs[0]:
+    st.session_state.tab_index = 0
     st.title("Ulti-miR v1: An integrated, ontology-mapped database of miRNA associations with miRNA–disease similarity analytics")
     st.markdown("""
 MicroRNAs (miRNAs) have emerged as critical regulators involved in numerous biological processes, making them significant biomarkers and therapeutic targets across a broad spectrum of diseases, including cancers, cardiovascular disorders, and neurological conditions. Over the past two decades, a multitude of specialised miRNA databases have been developed. Pioneer resources like HMDD remain the go-to for literature-curated associations, while recent platforms such as PlasmiR, add > 1000 blood-borne miRNA biomarkers spanning 112 diseases. Together, these datasets synthesise data from low-throughput validations, high-throughput screens, and computational predictions, giving researchers multiple vantage points on miRNA pathobiology.
@@ -102,7 +105,8 @@ Our platform is designed to maximize usability, transparency, and reproducibilit
 """)
 
 # TAB 1: SQL EXPLORER
-elif selected_tab == "miRNA SQL Explorer":
+with tabs[1]:
+    st.session_state.tab_index = 1
     st.header("miRNA SQL Explorer")
     db_path = "miRNA.db"
     csv_mapping = {
@@ -150,7 +154,8 @@ elif selected_tab == "miRNA SQL Explorer":
             st.error(f"❌ Error: {e}")
 
 # TAB 2: CLUSTERING VIEW
-elif selected_tab == "Clustering View":
+with tabs[2]:
+    st.session_state.tab_index = 2
     st.header("Disease Clustering")
 
     # User inputs to control number of clusters and clustering method
@@ -293,7 +298,8 @@ elif selected_tab == "Clustering View":
 #    st.pyplot(fig4)
 
 # TAB 3: NETWORK ANALYSIS
-elif selected_tab == "Similarity Network":
+with tabs[3]:
+    st.session_state.tab_index = 3
     st.header("Disease Similarity Network")
 
     threshold = st.slider(
